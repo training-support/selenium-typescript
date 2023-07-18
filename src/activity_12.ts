@@ -1,7 +1,6 @@
 // Activity 12
 // * Open https://training-support.net/selenium/Tables
 // * Print the title of the page
-// * Print the title of the page
 // * Create a new row and enter the following values into it:
 //   | 10 | The Lightning Thief | Rick Riordan | 0786838655 | $8.01 |
 // * Click the header that says ASIN to sort the table

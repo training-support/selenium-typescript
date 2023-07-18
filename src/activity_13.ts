@@ -1,11 +1,11 @@
 // Activity 13
-// * Open https://training-support.net/selenium/Tables
+// * Open https://training-support.net/selenium/DynamicAttributes
 // * Print the title of the page
-// * Print the title of the page
-// * Create a new row and enter the following values into it:
-//   | 10 | The Lightning Thief | Rick Riordan | 0786838655 | $8.01 |
-// * Click the header that says ASIN to sort the table
-// * Print the cell at the 4th row 2nd column
+// * Fill out the form and submit it
+// * Verify that the form was submitted
+// * Refresh the page
+// * Fill out the form again using the SAME LOCATORS as before
+// * Verify that the form submits again
 
 import { Builder, By, WebDriver } from "selenium-webdriver";
 
@@ -13,7 +13,7 @@ import { Builder, By, WebDriver } from "selenium-webdriver";
   const driver: WebDriver = await new Builder().forBrowser("firefox").build();
   try {
     // Navigate to the page
-    await driver.get("https://training-support.net/selenium/Tables");
+    await driver.get("https://training-support.net/selenium/DynamicAttributes");
 
     // Give the page a second to load
     await driver.sleep(1000);
@@ -21,37 +21,32 @@ import { Builder, By, WebDriver } from "selenium-webdriver";
     // Print the title of the page
     console.log(`The title of the page is: ${await driver.getTitle()}`);
 
-    // Add a new row
-    await driver.findElement(By.css("button.rounded-lg")).click();
+    // Fill out the form
+    const fill_form_and_submit = async () => {
+      await driver
+        .findElement(By.css("input[id^='full-name']"))
+        .sendKeys("Abhiram K");
+      await driver
+        .findElement(By.css("input[id$='email']"))
+        .sendKeys("abhiram@cklabs.com");
+      await driver
+        .findElement(By.xpath("//input[contains(@name, 'event-date')]"))
+        .sendKeys("2023-12-25");
+      await driver
+        .findElement(By.css("textarea[id*='additional-details']"))
+        .sendKeys("This is a party!!");
+      await driver.findElement(By.css("button.font-bold")).click();
+    };
+    await fill_form_and_submit();
 
-    // Get the cells of the new row
-    const last_row_cells = await driver.findElements(
-      By.xpath("//table/tbody/tr[last()]/td")
-    );
+    // Refresh the page
+    await driver.navigate().refresh();
 
-    // Represent the data to be added as an array
-    const row_data = [
-      "10",
-      "The Lightning Thief",
-      "Rick Riordan",
-      "0786838655",
-      "$8.01",
-    ];
+    // Give the page a second to load
+    await driver.sleep(1000);
 
-    // Insert the data into the new row cells
-    for (const [i, cell] of last_row_cells.entries()) {
-      await cell.clear();
-      await cell.sendKeys(row_data[i]);
-    }
-
-    // Click on the ASIN header to sort the table
-    await driver.findElement(By.xpath("//th[text()='ASIN']")).click();
-
-    // Get the value at the 4th row, 2nd column
-    const cell4_2 = await driver
-      .findElement(By.xpath("//table/tbody/tr[4]/td[2]"))
-      .getText();
-    console.log(`The value at (4,2) is: ${cell4_2}`);
+    // Fill out the form again
+    await fill_form_and_submit();
   } finally {
     await driver.quit();
   }
