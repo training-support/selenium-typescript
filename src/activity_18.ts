@@ -5,7 +5,7 @@
 // * Do this until you open a tab with the code “incentive” on it
 // * Print the number of tabs you had to open until you reached this tab
 
-import { Builder, By, WebDriver } from "selenium-webdriver";
+import { Builder, By, WebDriver, until } from "selenium-webdriver";
 
 (async function (): Promise<void> {
   const driver: WebDriver = await new Builder().forBrowser("firefox").build();
@@ -48,6 +48,7 @@ import { Builder, By, WebDriver } from "selenium-webdriver";
 
       // Wait for the code to load
       await driver.sleep(500);
+      await driver.wait(until.elementLocated(By.xpath("//h2/span")));
       const code = await driver.findElement(By.xpath("//h2/span")).getText();
 
       if (code === "incentive") {
